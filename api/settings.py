@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
+from api.database import DATABASES
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -12,16 +13,28 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-pg3+j8l+znq$gbo@artqlb==z!^l7o_h)9ngh!_dgcz-c^f+@v'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
+#ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=lambda v: [s.strip() for s in v.split(',')])
 ALLOWED_HOSTS = ['*']
 
 
-# Application definition
+HOST_SCHEME = "https://"
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_PRELOAD = True
+SECURE_FRAME_DENY = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
+
+# Application definition
 INSTALLED_APPS = [
     'dal',
     'dal_select2',
@@ -35,6 +48,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'django_filters',
+    'corsheaders',
+    'django_extensions',
 
     # Applications
     'security',
@@ -45,13 +60,15 @@ INSTALLED_APPS = [
     'employee_management',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE = [    
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  
+    'django.contrib.sessions.middleware.SessionMiddleware',    
+    'django.middleware.common.CommonMiddleware',    
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',    
+    'django.contrib.auth.middleware.AuthenticationMiddleware',    
+    'django.contrib.messages.middleware.MessageMiddleware',    
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -79,23 +96,8 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+DATABASES['default'] = DATABASES['mysql']
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': os.environ.get('DB_NAME'),
-#         'USER': os.environ.get('DB_USER'),
-#         'PASSWORD': os.environ.get('DB_PASSWORD'),
-#         'HOST': os.environ.get('DB_HOST') if os.environ.get('DB_HOST') else '172.16.0.10',
-#         'PORT': os.environ.get('DB_PORT') if os.environ.get('DB_PORT') else '3306',
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -133,9 +135,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-
 STATIC_ROOT = "/var/www/smartmecanico/static/"
 MEDIA_ROOT = "/var/www/smartmecanico/media/"
 
@@ -155,11 +154,37 @@ STATICFILES_FINDERS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #########################################################
 
+# LOGGER
+
+
 # AUTHENTICATION BACKENDS
 AUTHENTICATION_BACKENDS = [
     'security.authentication.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+# Cross-Origin Resource Sharing (CORS).
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = [
+    'http://173.224.117.181',
+    'https://173.224.117.181',
+    'https://dockersky.com',
+    'http://dockersky.com',
+    'https://api-smartmecanico.dockersky.com',
+    'http://api-smartmecanico.dockersky.com',
+    'https://localhost:8000',
+    'http://localhost:8000',
+    'https://127.0.0.1:8000',
+    'http://127.0.0.1:8000'
+]
+CSRF_TRUSTED_ORIGINS = ["https://api-smartmecanico.dockersky.com"]
+CSRF_ALLOWED_ORIGINS = ["https://api-smartmecanico.dockersky.com"]
+CORS_ORIGINS_WHITELIST = ["https://api-smartmecanico.dockersky.com"]
+CORS_ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'DELETE']
+CORS_ALLOWED_HEADERS = ['*']
+CSRF_COOKIE_NAME = 'csrftoken'
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = True
 
 # SMTP SERVICES
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
