@@ -1,0 +1,40 @@
+.flex-container .hour-button {
+    font-size: smaller;
+    margin-right: 5px;
+    padding: 5px;
+}
+
+.hour-buttons-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.hour-button {
+    padding: 10px;
+    border: 1px solid #000;
+    cursor: pointer;
+}
+
+/* CALENDAR */
+.slider-container {
+    border: 1px solid #000;
+    padding: 20px;
+}
+.month-slider, .day-slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.month {
+    margin: 0 10px;
+}
+.day, .dow {
+    width: 20px;
+    text-align: center;
+    margin: 0 5px;
+}
+.dow {
+    font-weight: bold;
+}

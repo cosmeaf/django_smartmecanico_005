@@ -1,0 +1,8 @@
+/* style.css */
+.admin-profile-image {
+    max-width: 30px;
+    max-height: 30px;
+    border-radius: 50%;
+    display: block;
+    margin: auto;
+}

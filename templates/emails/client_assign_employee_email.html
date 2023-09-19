@@ -1,0 +1,20 @@
+<html>
+<body>
+    <h1>Olá, {{ appointment.user.username }}!</h1>
+    <p>
+        A designação de mecânico para o seu serviço foi atualizada. Aqui estão os detalhes:
+    </p>
+    <p>
+        <strong>Número de Protocolo:</strong> {{ appointment.protocol }} <br>
+        <strong>Antigo Mecânico:</strong> {{ old_employee.name if old_employee else "N/A" }} <br>
+        <strong>Novo Mecânico:</strong> {{ new_employee.name }}
+    </p>
+    <p>
+        Se você tiver alguma dúvida, por favor, entre em contato conosco.
+    </p>
+    <p>
+        Atenciosamente, <br>
+        Equipe Smart Mecânico
+    </p>
+</body>
+</html>
