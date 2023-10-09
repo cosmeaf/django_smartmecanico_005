@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES['default'] = DATABASES['mysql']
+DATABASES['default'] = DATABASES['default']
 
 
 # Password validation
@@ -166,12 +166,8 @@ AUTHENTICATION_BACKENDS = [
 # Cross-Origin Resource Sharing (CORS).
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGINS = [
-    'http://173.224.117.181',
-    'https://173.224.117.181',
-    'https://dockersky.com',
-    'http://dockersky.com',
-    'https://api-smartmecanico.dockersky.com',
-    'http://api-smartmecanico.dockersky.com',
+    'https://85.31.231.240',
+    'http://85.31.231.240',
     'https://localhost:8000',
     'http://localhost:8000',
     'https://127.0.0.1:8000',
