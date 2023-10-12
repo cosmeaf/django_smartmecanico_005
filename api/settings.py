@@ -1,9 +1,8 @@
+################
 import os
 from pathlib import Path
-from decouple import config
 from datetime import timedelta
-from api.database import DATABASES
-
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,31 +12,29 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = '8&9_$w5wh3bcs*qn3tb9v-q3s#get-mg%fv)k_owb=hcx1=fjk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = True
 
-#ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=lambda v: [s.strip() for s in v.split(',')])
 ALLOWED_HOSTS = ['*']
 
-
-HOST_SCHEME = "https://"
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_PRELOAD = True
-SECURE_FRAME_DENY = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
+# HOST_SCHEME = "https://"
+# # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = False
+# SECURE_PROXY_SSL_HEADER = None
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SECURE_HSTS_SECONDS = 31536000 
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True 
+# SECURE_FRAME_DENY = True 
+# SECURE_CONTENT_TYPE_NOSNIFF = True 
 
 
 # Application definition
+
 INSTALLED_APPS = [
-    'dal',
-    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,28 +44,25 @@ INSTALLED_APPS = [
     # Library
     'rest_framework',
     'rest_framework_simplejwt',
-    'django_filters',
     'corsheaders',
     'django_extensions',
+    'django_filters',
 
     # Applications
     'security',
-    'address',
-    'vehicle',
-    'services',
-    'appointment',
+    'smartmecanico',
     'employee_management',
 ]
 
-MIDDLEWARE = [    
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  
-    'django.contrib.sessions.middleware.SessionMiddleware',    
-    'django.middleware.common.CommonMiddleware',    
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',    
-    'django.contrib.auth.middleware.AuthenticationMiddleware',    
-    'django.contrib.messages.middleware.MessageMiddleware',    
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -77,7 +71,7 @@ ROOT_URLCONF = 'api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -96,7 +90,12 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES['default'] = DATABASES['default']
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # Password validation
@@ -141,8 +140,6 @@ MEDIA_ROOT = "/var/www/smartmecanico/media/"
 STATICFILES_DIRS=[
     os.path.join(BASE_DIR, 'static/')
 ]
-
-
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -152,35 +149,17 @@ STATICFILES_FINDERS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-#########################################################
+###################################################################
+# Título da página de login
+ADMIN_SITE_TITLE = 'Smart Mecânico'
+INDEX_TITLE = "Adminstração Smart Mecânico"
+ADMIN_SITE_HEADER = "Adminstração Smart Mecânico"
 
-# LOGGER
+# NEW DATABASE CUSTOM
+AUTH_USER_MODEL = 'security.CustomUser'
 
-
-# AUTHENTICATION BACKENDS
-AUTHENTICATION_BACKENDS = [
-    'security.authentication.EmailBackend',
-    'django.contrib.auth.backends.ModelBackend',
-]
-
-# Cross-Origin Resource Sharing (CORS).
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOWED_ORIGINS = [
-    'https://85.31.231.240',
-    'http://85.31.231.240',
-    'https://localhost:8000',
-    'http://localhost:8000',
-    'https://127.0.0.1:8000',
-    'http://127.0.0.1:8000'
-]
-CSRF_TRUSTED_ORIGINS = ["https://api-smartmecanico.dockersky.com"]
-CSRF_ALLOWED_ORIGINS = ["https://api-smartmecanico.dockersky.com"]
-CORS_ORIGINS_WHITELIST = ["https://api-smartmecanico.dockersky.com"]
-CORS_ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'DELETE']
-CORS_ALLOWED_HEADERS = ['*']
-CSRF_COOKIE_NAME = 'csrftoken'
-CSRF_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SECURE = True
+# URL
+LOGOUT_REDIRECT_URL = '/admin/login/'
 
 # SMTP SERVICES
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
@@ -190,7 +169,49 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
 
-# DJANGO REST FRAMEWORK ACCESS AND PERMISSIONS
+# Cross-Origin Resource Sharing (CORS).
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'https://127.0.0.1',
+    'http://127.0.0.1',
+    'https://85.31.231.240',
+    'http://85.31.231.240',
+    'https://smartmecanico.app',
+    'http://smartmecanico.app',
+    'https://smart-api.smartmecanico.app',
+    'http://smart-api.smartmecanico.app',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'https://127.0.0.1',
+    'http://127.0.0.1',
+    'https://85.31.231.240',
+    'http://85.31.231.240',
+    'https://smartmecanico.app',
+    'http://smartmecanico.app',
+    'https://smart-api.smartmecanico.app',
+    'http://smart-api.smartmecanico.app',
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOWED_HEADERS = ['*']
+CSRF_COOKIE_NAME = 'csrftoken'
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = True
+
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -201,14 +222,25 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
     'API_TITLE': 'Smart Mecânico API V2',
-    'API_DESCRIPTION': 'Agendamento de serviços mecânicos veícular em qualquer lugar API',
+    'API_DESCRIPTION': 'Agendamento de serviços mecânicos veiculares em qualquer lugar API',
+    'EXCEPTION_HANDLER': 'security.utils.exception.custom_exception_handler',
+    'NON_FIELD_ERRORS_KEY': "error",
 }
 
-# DJANGO SIMPLE JWT
+
+# TOKEN SIMPLEJWT FOR DJANGO DRF
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": False,
-    "UPDATE_LAST_LOGIN": False,
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=120),
+    'SLIDING_TOKEN_REFRESH_LIFETIME_GRACE_PERIOD': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
 }

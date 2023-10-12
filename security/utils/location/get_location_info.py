@@ -2,11 +2,11 @@
 from decouple import config
 import requests
 
-APY_KEY = config('APY_KEY')
+API_KEY = config('API_KEY')
 
 def get_location_info(ip_address):
     try:
-        response = requests.get(f'https://api.ipgeolocation.io/ipgeo?apiKey={APY_KEY}&ip={ip_address}')
+        response = requests.get(f'https://api.ipgeolocation.io/ipgeo?apiKey={API_KEY}&ip={ip_address}')
         data = response.json()
         if response.status_code == 200:
             location_info = {

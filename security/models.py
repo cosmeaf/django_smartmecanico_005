@@ -1,36 +1,95 @@
 import os
-from django.db import models
-from django.contrib.auth import get_user_model
-from django.core.validators import MinLengthValidator, MaxLengthValidator
-from django.core.exceptions import ValidationError
 import uuid
+from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.core.validators import MinLengthValidator, MaxLengthValidator
 
-User = get_user_model()
+
 def get_file_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
     return os.path.join('profile_pictures', filename)
 
-
-def validate_bio_height(value):
-    if len(value) > 500:
-        raise ValidationError('A biografia deve ter no máximo 500 caracteres.')
-
-    
 class Base(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField('Data de Criação', auto_now_add=True)
-    updated_at = models.DateTimeField('Ultima Atualização', auto_now=True)
-    deleted_at = models.DateTimeField('Data de Exclusão', null=True, blank=True, editable=False)
+    updated_at = models.DateTimeField('Última Atualização', auto_now=True)
+    deleted_at = models.DateTimeField('Data de Exclusão', null=True, blank=True)
 
     class Meta:
         abstract = True
-        verbose_name = 'Base Model'
-        verbose_name_plural = 'Bases Models'
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **kwargs):
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        email = self.normalize_email(email)
+        email = email.lower()
+
+        user = self.model(
+            email=email,
+            **kwargs
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+
+    def create_superuser(self, email, password=None, **kwargs):
+        user = self.create_user(
+            email,
+            password=password,
+            **kwargs
+        )
+
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self._db)
+
+        return user
+
+
+class CustomUser(Base, AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True, max_length=255)
+    password = models.CharField(max_length=128)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    image = models.ImageField('Imagem Perfil', upload_to=get_file_path, null=True, blank=True)
+    bio = models.TextField('Biografia', max_length=500, blank=True, null=True)
+    birthday = models.DateField(null=True, blank=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
+
+    objects = CustomUserManager()
+
+    class Meta:
+        verbose_name = "Cliente / Usuário"
+        verbose_name_plural = "Clientes / Usuários"
+
+    def __str__(self):
+        return self.email
+
+    def delete_old_image(self):
+        try:
+            old_profile = CustomUser.objects.get(id=self.id)
+            if old_profile.image and old_profile.image != self.image and os.path.isfile(old_profile.image.path):
+                os.remove(old_profile.image.path)
+        except CustomUser.DoesNotExist:
+            pass
+
+    def save(self, *args, **kwargs):
+        self.delete_old_image()
+        super().save(*args, **kwargs)
 
 
 class RecoverPassword(Base):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, db_index=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, db_index=True)
     otp = models.CharField(max_length=6, validators=[MinLengthValidator(6), MaxLengthValidator(6)])
     token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
     expiry_datetime = models.DateTimeField(db_index=True)
@@ -45,27 +104,3 @@ class RecoverPassword(Base):
 
     def is_token_used(self):
         return self.is_used
-
-    
-class Profile(Base):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    bio = models.TextField('Biografia', max_length=500, blank=True, null=True, validators=[validate_bio_height])
-    phone_number = models.CharField('Contato',max_length=15, blank=True, null=True)
-    birth_date = models.DateField('Data Nascimento',null=True, blank=True)
-    image = models.ImageField('Imagem Perfil', upload_to=get_file_path, null=True, blank=True)
-
-    def __str__(self):
-        return self.user.username
-
-    def delete_old_image(self):
-        try:
-            old_profile = Profile.objects.get(id=self.id)
-            if old_profile.image and old_profile.image != self.image and os.path.isfile(old_profile.image.path):
-                os.remove(old_profile.image.path)
-        except Profile.DoesNotExist:
-            pass
-
-    def save(self, *args, **kwargs):
-        self.delete_old_image()
-        super().save(*args, **kwargs)
-

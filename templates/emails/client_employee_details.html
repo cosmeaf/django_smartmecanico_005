@@ -2,98 +2,98 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Mecânico</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-            color: #333;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes do Mecânico</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+      color: #333;
+    }
 
-        .container {
-            padding: 20px;
-        }
+    .container {
+      padding: 20px;
+    }
 
-        .mechanic-info {
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin-top: 20px;
-            text-align: center;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-        }
+    .mechanic-info {
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin-top: 20px;
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+    }
 
-        .mechanic-info img {
-            max-width: 100px;
-            border-radius: 50%;
-            margin-bottom: 15px;
-        }
+    .mechanic-info img {
+      max-width: 100px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
 
-        .mechanic-info h3 {
-            margin: 10px 0;
-        }
+    .mechanic-info h3 {
+      margin: 10px 0;
+    }
 
-        .mechanic-info p {
-            margin: 0 0 10px 0;
-        }
+    .mechanic-info p {
+      margin: 0 0 10px 0;
+    }
 
-        @media (min-width: 600px) {
-            .container {
-                max-width: 500px;
-                margin: 0 auto;
-            }
-        }
+    @media (min-width: 600px) {
+      .container {
+        max-width: 500px;
+        margin: 0 auto;
+      }
+    }
 
-        @media (min-width: 768px) {
-            .container {
-                max-width: 700px;
-            }
+    @media (min-width: 768px) {
+      .container {
+        max-width: 700px;
+      }
 
-            .mechanic-info {
-                display: flex;
-                align-items: center;
-                text-align: left;
-                padding: 30px;
-            }
+      .mechanic-info {
+        display: flex;
+        align-items: center;
+        text-align: left;
+        padding: 30px;
+      }
 
-            .mechanic-info img {
-                margin-right: 20px;
-            }
+      .mechanic-info img {
+        margin-right: 20px;
+      }
 
-            .mechanic-info div {
-                max-width: 450px;
-            }
-        }
-    </style>
+      .mechanic-info div {
+        max-width: 450px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <h2>Olá, {{ appointment.user.first_name }}!</h2>
+  <div class="container">
+    <h2>Olá, {{ appointment.user.first_name }}!</h2>
 
-        <p>Estamos escrevendo para informar que o mecânico abaixo foi designado para seu serviço agendado:</p>
+    <p>Estamos escrevendo para informar que o mecânico abaixo foi designado para seu serviço agendado:</p>
 
-        <div class="mechanic-info">
-            {% if new_employee.photo %}
-                <img src="{{ new_employee.photo.url }}" alt="Foto do {{ new_employee.first_name }}">
-            {% endif %}
-            <div>
-                <h3>{{ new_employee.first_name }} {{ new_employee.last_name }}</h3>
-                <p>Esse é o mecânico que estará atendendo o seu agendamento.</p>
-            </div>
-        </div>
-
-        <p>Se você tiver alguma dúvida ou preocupação, por favor, entre em contato conosco.</p>
-
-        <p>Atenciosamente,</p>
-        <p>Equipe Smart Mecânico</p>
+    <div class="mechanic-info">
+      {% if new_employee.photo %}
+      <img src="{{ new_employee.photo.url }}" alt="Foto do {{ new_employee.first_name }}">
+      {% endif %}
+      <div>
+        <h3>{{ new_employee.first_name }} {{ new_employee.last_name }}</h3>
+        <p>Esse é o mecânico que estará atendendo o seu agendamento.</p>
+      </div>
     </div>
+
+    <p>Se você tiver alguma dúvida ou preocupação, por favor, entre em contato conosco.</p>
+
+    <p>Atenciosamente,</p>
+    <p>Equipe Smart Mecânico</p>
+  </div>
 
 </body>
 

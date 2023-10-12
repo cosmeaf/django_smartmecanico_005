@@ -1,13 +1,43 @@
-from django.http import Http404
-from rest_framework.generics import CreateAPIView
+from rest_framework import status, serializers, viewsets, permissions
 from rest_framework.response import Response
-from rest_framework import status
-from .serializers import UserRegisterSerializer, PasswordRecoverySerializer, OtpValidationSerializer, ResetPasswordSerializer
+from rest_framework.decorators import action
+from rest_framework.generics import CreateAPIView
+from rest_framework.permissions import BasePermission
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from .serializers import CustomUserLoginSerializer, UserRegisterSerializer, PasswordRecoverySerializer, OtpValidationSerializer, ResetPasswordSerializer
+from django.http import Http404
 from .models import RecoverPassword  
-from rest_framework.permissions import AllowAny
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import NotFound
 
+# Login Custumizado
+class CustomUserLoginView(CreateAPIView):
+    serializer_class = CustomUserLoginSerializer
+    permission_classes = [AllowAny] 
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = serializer.validated_data['user']
+
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+        refresh_token = str(refresh)
+
+        response_data = {
+            'id': user.id,
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'token': access_token,
+            'refresh': refresh_token,
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+
+# Register User Custumized
 class RegisterView(CreateAPIView):
     serializer_class = UserRegisterSerializer
 
@@ -22,11 +52,11 @@ class RegisterView(CreateAPIView):
     def perform_create(self, serializer):
         serializer.save()
 
-
+# Recovery Password
 class PasswordRecoveryView(CreateAPIView):
     serializer_class = PasswordRecoverySerializer
 
-
+# OTP code Recevy
 class OtpValidationView(CreateAPIView):
     serializer_class = OtpValidationSerializer
 
@@ -36,7 +66,7 @@ class OtpValidationView(CreateAPIView):
         reset_url = serializer.validated_data["reset_url"]
         return Response({"message": "OTP validado com sucesso", "reset_url": reset_url})
 
-
+# Reset Password After OTP
 class ResetPasswordView(CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = ResetPasswordSerializer
@@ -57,7 +87,6 @@ class ResetPasswordView(CreateAPIView):
         serializer.save()
         
         return Response({"message": "Senha redefinida com sucesso."})
-
 
 
 

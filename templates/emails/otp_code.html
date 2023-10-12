@@ -1,109 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Código de Verificaçao Smart Mecânico</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .header, .content, .footer {
-            margin-bottom: 20px;
-        }
-        .header h3, .otp-code {
-            text-align: center;
-            color: #d9534f;
-        }
-        .otp-code {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 20px 0;
-        }
-        .content p {
-            margin: 10px 0;
-        }
-        .device-info, .location-info {
-            margin-bottom: 10px;
-        }
-        .device-info span, .location-info span {
-            font-weight: bold;
-        }
-        .footer {
-            text-align: center;
-        }
-        .footer p {
-            margin: 10px 0;
-        }
-        @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-            }
-            .otp-code {
-                font-size: 20px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Código de Verificaçao Smart Mecânico</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header,
+    .content,
+    .footer {
+      margin-bottom: 20px;
+    }
+
+    .header h3,
+    .otp-code {
+      text-align: center;
+      color: #d9534f;
+    }
+
+    .otp-code {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    .content p {
+      margin: 10px 0;
+    }
+
+    .device-info,
+    .location-info {
+      margin-bottom: 10px;
+    }
+
+    .device-info span,
+    .location-info span {
+      font-weight: bold;
+    }
+
+    .footer {
+      text-align: center;
+    }
+
+    .footer p {
+      margin: 10px 0;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+
+      .otp-code {
+        font-size: 20px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-    
-    <div class="container">
-        <div class="header">
-            <h3>Verification code</h3>
-            <div class="otp-code">
-                {{ otp_code }}
-            </div>
-        </div>
-        <div class="content">
-            Hey {{ user.first_name }}!
-            <p>
-                A sign in attempt requires further verification because we did not recognize your device. To complete the sign in, enter the verification code on the unrecognized device.
-            </p>
-            <div class="device-info">
-                <p><span>Device:</span> OS: {{ device_info.os_name }} <span>Version:</span> {{ device_info.os_version }}</p>
-                <p><span>Machine:</span> {{ device_info.machine }}</p>
-                <p><span>Processor:</span> {{ device_info.processor }}</p>
-            </div>
-            <div class="location-info">
-                <p><span>Location:</span> IP: {{ location_info.ip }}</p>
-                <p><span>ISP:</span> {{ location_info.isp }}</p>
-                <p><span>Country:</span> {{ location_info.country }}</p>
-                <p><span>State:</span> {{ location_info.state }}</p>
-                <p><span>City:</span> {{ location_info.city }}</p>
-                <p><span>Zip-Code:</span> {{ location_info.zipcode }}</p>
-            </div>
-            <p>
-                <strong>Verification code:</strong> {{ otp_code }}
-            </p>
-            <p>
-                If you did not attempt to sign in to your account, your password may be compromised. Visit [URL] to create a new, strong password for your Smart Mecânico account.
-            </p>
-            <p>
-                If you'd like to automatically verify devices in the future, consider enabling two-factor authentication on your account. Visit [URL] to learn about two-factor authentication.
-            </p>
-            <p>
-                If you decide to enable two-factor authentication, ensure you retain access to one or more account recovery methods. See [URL] in the Smart Mecânico Help.
-            </p>
-        </div>
-        <div class="footer">
-            Thanks,
-            <br>
-            The Smart Mecânico Team
-        </div>
+
+  <div class="container">
+    <div class="header">
+      <h3>Verification code</h3>
+      <div class="otp-code">
+        {{ otp_code }}
+      </div>
     </div>
-    
+    <div class="content">
+      Hey {{ user.first_name }}!
+      <p>
+        A sign in attempt requires further verification because we did not recognize your device. To complete the sign
+        in, enter the verification code on the unrecognized device.
+      </p>
+      <div class="device-info">
+        <p><span>Device:</span> OS: {{ device_info.os_name }} <span>Version:</span> {{ device_info.os_version }}</p>
+        <p><span>Machine:</span> {{ device_info.machine }}</p>
+        <p><span>Processor:</span> {{ device_info.processor }}</p>
+      </div>
+      <div class="location-info">
+        <p><span>Location:</span> IP: {{ location_info.ip }}</p>
+        <p><span>ISP:</span> {{ location_info.isp }}</p>
+        <p><span>Country:</span> {{ location_info.country }}</p>
+        <p><span>State:</span> {{ location_info.state }}</p>
+        <p><span>City:</span> {{ location_info.city }}</p>
+        <p><span>Zip-Code:</span> {{ location_info.zipcode }}</p>
+      </div>
+      <p>
+        <strong>Verification code:</strong> {{ otp_code }}
+      </p>
+      <p>
+        If you did not attempt to sign in to your account, your password may be compromised. Visit [URL] to create a
+        new, strong password for your Smart Mecânico account.
+      </p>
+      <p>
+        If you'd like to automatically verify devices in the future, consider enabling two-factor authentication on your
+        account. Visit [URL] to learn about two-factor authentication.
+      </p>
+      <p>
+        If you decide to enable two-factor authentication, ensure you retain access to one or more account recovery
+        methods. See [URL] in the Smart Mecânico Help.
+      </p>
+    </div>
+    <div class="footer">
+      Thanks,
+      <br>
+      The Smart Mecânico Team
+    </div>
+  </div>
+
 </body>
+
 </html>
