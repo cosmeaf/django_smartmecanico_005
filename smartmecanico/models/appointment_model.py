@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import datetime
 from security.models import CustomUser
 from smartmecanico.models.address_model import Address
 from smartmecanico.models.vehicle_model import Vehicle

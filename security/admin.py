@@ -29,6 +29,7 @@ class CustomUserAdmin(UserAdmin):
         (None, {'fields': ('password',)}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'image', 'bio', 'birthday', 'phone_number')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
+        ('Security', {'fields': ('failed_login_attempts', 'last_failed_login')})  # Adicionado essa seção
     )
 
     def profile_image(self, obj):
@@ -63,7 +64,7 @@ admin.site.register(CustomUser, CustomUserAdmin)
 @admin.register(RecoverPassword)
 class RecoverPasswordAdmin(admin.ModelAdmin):
     list_display = ('user', 'otp', 'token', 'expiry_datetime', 'is_used', 'ip_address')
-    readonly_fields = ['created_at', 'updated_at', 'deleted_at', 'otp', 'token', 'expiry_datetime', 'is_used', 'ip_address']
-    list_filter = ('user', 'otp', 'token', 'expiry_datetime', 'is_used', 'ip_address')
-    search_fields = ('user', 'otp', 'token', 'expiry_datetime', 'is_used', 'ip_address')
+    # readonly_fields = ['created_at', 'updated_at', 'deleted_at', 'otp', 'token', 'expiry_datetime', 'is_used', 'ip_address']
+    list_filter = ('user', 'is_used', 'expiry_datetime')
+    search_fields = ('user__email', 'otp', 'token') 
 

@@ -2,8 +2,6 @@ from django import forms
 from django.contrib import admin
 from employee_management.models import EmployeeInfo
 from smartmecanico.models.appointment_model import Appointment
-from employee_management.utils.emails.assign_employee_email import send_mechanic_details_to_client, send_service_order_to_employee
-
 
 class AppointmentAdminForm(forms.ModelForm):
     employee = forms.ModelChoiceField(queryset=EmployeeInfo.objects.all(), required=False)
@@ -38,36 +36,25 @@ class AppointmentAdmin(admin.ModelAdmin):
         return "-"
     employee_name.short_description = 'Mechanic assigned'
 
-
     def save_model(self, request, obj, form, change):
-        if not change:
-            try:
-                obj.save()
-            except Exception as e:
+        try:
+            obj.save()
+        except Exception as e:
+            if not change:
                 self.message_user(request, f"Erro ao criar o agendamento: {str(e)}", level='error')
-        else:
-            try:
-                obj.save()
-            except Exception as e:
+            else:
                 self.message_user(request, f"Erro ao atualizar o agendamento: {str(e)}", level='error')
-
 
     def assign_employee(self, request, queryset):
         employee_id = request.POST.get('employee_id')
-        print(f"Mecanico ID {employee_id}")
         if employee_id:
             try:
                 new_employee = EmployeeInfo.objects.get(id=employee_id)
-                
                 for appointment in queryset:
                     appointment.employee = new_employee
-                    appointment.save()                
-                    # send_mechanic_details_to_client(appointment, new_employee)                
-                    # send_service_order_to_employee(appointment)
+                    appointment.save()
                     print(appointment)
-                
                 self.message_user(request, f"Mecânico designado com sucesso.", level='success')
-
             except EmployeeInfo.DoesNotExist:
                 self.message_user(request, f"Mecânico não encontrado.", level='error')
             except Exception as e:

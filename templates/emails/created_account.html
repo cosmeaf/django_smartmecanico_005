@@ -1,0 +1,63 @@
+<!-- templates/emails/created_account.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conta Criada com Sucesso</title>
+</head>
+
+<body>
+  <div class="email-container">
+
+    <div class="header">
+      <h1>Smart Mecânico</h1>
+    </div>
+
+    <div class="content">
+      <h2>Conta Criada com Sucesso!</h2>
+      <p>Olá, {{ user.first_name }} {{ user.last_name }},</p>
+      <p>Sua conta na plataforma Smart Mecânico foi criada com sucesso.</p>
+
+      <h3>Detalhes da Conta:</h3>
+      <ul>
+        <li><strong>Nome:</strong> {{ user.first_name }} {{ user.last_name }}</li>
+        <li><strong>Email:</strong> {{ user.email }}</li>
+        <li><strong>Endereço IP de Criação:</strong> {{ ip_address }}</li>
+        <li><strong>Sistema Operacional:</strong> {{ machine_info.os_name }}</li>
+        <li><strong>Navegador:</strong> {{ machine_info.browser }}</li>
+        <li><strong>Dispositivo:</strong> {{ machine_info.device }}</li>
+        <li><strong>Localização:</strong>
+          {{ location_info.city }},
+          {{ location_info.state }},
+          {{ location_info.country }}
+        </li>
+
+        <li><strong>ISP:</strong> {{ location_info.isp }}</li>
+      </ul>
+
+      <h3>Notificações de Segurança:</h3>
+      <p>Por razões de segurança, estamos informando os detalhes de sua conexão durante a criação da conta. Se você não
+        reconhece esta atividade, entre em contato com nosso suporte imediatamente.</p>
+
+      <h3>Alertas:</h3>
+      <p>Por segurança, nunca compartilhe suas credenciais de login. A equipe Smart Mecânico nunca solicitará sua senha
+        por e-mail, telefone ou qualquer outro meio de comunicação.</p>
+
+      <p>Recomendamos que você sempre verifique a URL do site antes de inserir suas credenciais e utilize autenticação
+        de dois fatores, se disponível.</p>
+
+      <p>Se você tiver alguma dúvida ou preocupação, entre em contato conosco.</p>
+    </div>
+
+    <div class="footer">
+      <p>Obrigado por se juntar à nossa plataforma, Smart Mecânico!</p>
+      <p>&copy; 2023 Smart Mecânico. Todos os direitos reservados.</p>
+    </div>
+
+  </div>
+
+</body>
+
+</html>

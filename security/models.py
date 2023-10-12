@@ -62,6 +62,8 @@ class CustomUser(Base, AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    failed_login_attempts = models.PositiveIntegerField(default=0)
+    last_failed_login = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
@@ -90,13 +92,18 @@ class CustomUser(Base, AbstractBaseUser, PermissionsMixin):
 
 class RecoverPassword(Base):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, db_index=True)
-    otp = models.CharField(max_length=6, validators=[MinLengthValidator(6), MaxLengthValidator(6)])
-    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
-    expiry_datetime = models.DateTimeField(db_index=True)
+    otp = models.CharField(max_length=6)
+    token = models.UUIDField(unique=True)
+    expiry_datetime = models.DateTimeField()
     is_used = models.BooleanField(default=False)
-    ip_address = models.GenericIPAddressField(null=True, blank=True)
-
+    ip_address = models.GenericIPAddressField()
+    browser = models.CharField(max_length=255, null=True, blank=True)
+    device = models.CharField(max_length=255, null=True, blank=True)
+    os_name = models.CharField(max_length=255, null=True, blank=True)
+    os_version = models.CharField(max_length=255, null=True, blank=True)
+    
     class Meta:
+        verbose_name = 'Recuperar Senha'
         verbose_name_plural = 'Recupera Senhas'
 
     def __str__(self):

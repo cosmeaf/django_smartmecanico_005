@@ -12,6 +12,7 @@ from smartmecanico.views.vehicle_view import VehicleModelViewSet
 from smartmecanico.views.user_view import CustomUserModelViewSet
 from smartmecanico.views.services_view import ServiceModelViewSet, HourServiceModelViewSet
 from employee_management.views import EmployeeInfoModelViewSet
+from smartmecanico.views.appointment_view import AppointmentModelViewSet
 
 
 # Default Route Django Rest Framework
@@ -22,6 +23,7 @@ router.register(r'vehicles', VehicleModelViewSet, basename='vehicles')
 router.register(r'service', ServiceModelViewSet, basename='service')
 router.register(r'hourservice', HourServiceModelViewSet, basename='hourservice')
 router.register(r'employee', EmployeeInfoModelViewSet, basename='employee')
+router.register(r'appointment', AppointmentModelViewSet, basename='appointment')
 
 # Site Custom
 admin.site.index_title = settings.INDEX_TITLE
