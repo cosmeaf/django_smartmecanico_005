@@ -1,36 +1,32 @@
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
-from django.utils.html import strip_tags
 
-def send_appointment_confirmation_email(action, instance, original_instance=None):
-    recipient_email = instance.user.email
-    subject = ''
-    context = {'appointment': instance}
+def send_email(subject, template_name, appointment):
+    context = {
+        'appointment': appointment,
+    }
 
-    # Escolhendo o template de email correto para cada ação
-    template_name = ''
-
-    if action == 'creation':
-        subject = 'Serviço de Agendamento | Smart Mecânico'
-        template_name = 'emails/appointment_creation_email.html'
-
-    elif action == 'update':
-        subject = 'Atualizaçao de Agendamento | Smart Mecânico'
-        template_name = 'emails/appointment_update_email.html'
-        if instance.employee:
-            context['employee'] = instance.employee
-
-    elif action == 'deletion':
-        subject = 'Cancelamento de Serviço Agendado | Smart Mecânico'
-        template_name = 'emails/appointment_deletion_email.html'
-        # Você pode adicionar mais contextos aqui, se necessário, por exemplo:
-        # context['reason'] = 'Razão para o cancelamento'
-
-    # Renderizando o e-mail usando o template e o contexto
+    from_email = settings.EMAIL_HOST_USER
+    recipient_list = [appointment.user.email]
     html_message = render_to_string(template_name, context)
-    plain_message = strip_tags(html_message)
+    company_email = "contato@smartmecanico.com.br"
+    
+    email = EmailMessage(
+        subject,
+        html_message,
+        from_email,
+        recipient_list,
+        bcc=[company_email]
+    )
+    email.content_subtype = "html"
+    email.send()
 
-    # Enviando o e-mail
-    send_mail(subject, plain_message, settings.DEFAULT_FROM_EMAIL, 
-              [recipient_email], html_message=html_message)
+def send_appointment_creation_email(appointment):
+    send_email('Smart Mecânico | Confirmação de agendamento', 'emails/appointment_creation_confirmation.html', appointment)
+
+def send_appointment_update_email(appointment):
+    send_email('Smart Mecânico | Atualização de agendamento', 'emails/appointment_update_confirmation.html', appointment)
+
+def send_appointment_deletion_email(appointment):
+    send_email('Smart Mecânico | Notificação de cancelamento', 'emails/appointment_deletion_confirmation.html', appointment)

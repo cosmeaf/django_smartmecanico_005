@@ -4,7 +4,7 @@ from smartmecanico.models.appointment_model import Appointment
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        fields = ['id', 'user', 'address', 'vehicle', 'service', 'hour', 'day', 'protocol', 'employee']
+        fields = ['id', 'user', 'address', 'vehicle', 'service', 'hour', 'day', 'protocol', 'employee', 'cancellation_reason']
         read_only_fields = ('id',)
 
     def to_representation(self, instance):
@@ -15,4 +15,4 @@ class AppointmentSerializer(serializers.ModelSerializer):
 class AppointmentDetailSerializer(AppointmentSerializer):
     class Meta:
         model = Appointment
-        fields = ['id', 'user', 'address', 'vehicle', 'service', 'hour', 'day', 'protocol', 'employee', 'created_at', 'updated_at', 'deleted_at']
+        fields = ['id', 'user', 'address', 'vehicle', 'service', 'hour', 'day', 'protocol', 'employee', 'created_at', 'updated_at', 'deleted_at', 'cancellation_reason']

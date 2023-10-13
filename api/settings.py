@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'security',
     'smartmecanico',
     'employee_management',
+    'smart_history',
 ]
 
 MIDDLEWARE = [

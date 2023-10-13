@@ -1,0 +1,19 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<form action="" method="post">
+  {% csrf_token %}
+  <p>
+    Você realmente quer deletar os seguintes objetos?
+  </p>
+  <ul>
+    {% for obj in queryset %}
+    <li>{{ obj }}</li>
+    {% endfor %}
+  </ul>
+  <div>
+    {{ form.as_p }}
+  </div>
+  <input type="submit" value="Confirmar">
+</form>
+{% endblock %}

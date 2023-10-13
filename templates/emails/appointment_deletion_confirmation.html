@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Confirmação de Agendamento</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f6f6f6;
+      color: #333
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #fff;
+      border-radius: 5px;
+      overflow: hidden;
+      padding: 20px
+    }
+
+    .header {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 10px
+    }
+
+    .header img {
+      max-width: 150px;
+      margin: 0 auto
+    }
+
+    .title {
+      text-align: center;
+      font-weight: bold;
+      margin: 20px 0
+    }
+
+    .footer {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px
+    }
+
+    .icon:last-child {
+      margin-right: 0
+    }
+
+    .unsubscribe {
+      text-align: center;
+      margin-top: 20px;
+      color: #888
+    }
+
+    .about-section {
+      margin-top: 40px;
+      padding: 15px;
+      border-top: 2px solid #eee
+    }
+
+    .about-section .title {
+      font-weight: bold;
+      margin-bottom: 15px
+    }
+
+    .about-section .content p {
+      margin-bottom: 15px
+    }
+
+    .about-section ul {
+      list-style-type: none;
+      padding: 0
+    }
+
+    .about-section ul li {
+      margin-bottom: 10px
+    }
+
+    .about-section ul li a {
+      color: #007bff;
+      text-decoration: none
+    }
+
+    .about-section ul li a:hover {
+      color: #0056b3;
+      text-decoration: underline
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="URL_DA_IMAGEM" alt="Logo">
+    </div>
+    <div class="title">Cancelamento de Agendamento</div>
+    <p>Prezado(a) {{ appointment.user.first_name }},</p>
+    <!-- ajustado para ser mais neutro em termos de gênero e para se alinhar com o modelo do usuário -->
+    <p>Lamentamos informar que seu agendamento de serviços com a Smart Mecânico foi cancelado. Seguem os detalhes do
+      agendamento cancelado:</p>
+
+    <h1>Descriçao do serviço: {{ appointment.description }}</h1>
+    <hr>
+    <p>Tipo de serviço: {{ appointment.service }}</p>
+    <p>Data do serviço: {{ appointment.day }} e horário {{ appointment.hour }} </p>
+    <p>Endereço do serviço: {{ appointment.address }}</p>
+    <p>Veículo Placa: {{ appointment.vehicle.plate }}</p>
+    <p>Veículo Modelo: {{ appointment.vehicle.model }}</p>
+
+    <p>Se você tiver qualquer dúvida ou preocupação em relação a este cancelamento, por favor, entre em contato conosco.
+    </p>
+
+    <p>Agradecemos por escolher a Smart Mecânico e esperamos vê-lo novamente em breve!</p>
+    <p>Agradecemos por escolher a Smart Mecânico!</p>
+
+    <p>Atenciosamente,</p>
+    <p>Equipe Smart Mecânico</p>
+
+    <p>OBS:</p>
+    <p>Caso não tenha sido você, bla bla bla etc...</p>
+    <div class="about-section">
+      <div class="title">Conheça mais sobre nós!</div>
+      <div class="content">
+        <p>Na SmartMecanico, estamos comprometidos em oferecer os melhores serviços para o seu veículo. Além de
+          agendamentos, oferecemos uma variedade de outros serviços e produtos para garantir que seu carro esteja sempre
+          em perfeitas condições.</p>
+        <ul>
+          <li><a href="URL_DO_SITE/sobre">Sobre a nossa empresa</a></li>
+          <li><a href="URL_DO_SITE/servicos">Nossos serviços</a></li>
+          <li><a href="URL_DO_SITE/blog">Nosso blog</a> - Fique atualizado com as últimas notícias e tendências
+            automotivas!</li>
+          <li><a href="URL_DO_SITE/contato">Entre em contato</a> - Tem perguntas? Estamos aqui para ajudar!</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      <!-- Coloque os ícones de mídias sociais aqui -->
+      <a href="#" class="icon"><img src="URL_ICONE_1" alt="Icone 1"></a>
+      <a href="#" class="icon"><img src="URL_ICONE_2" alt="Icone 2"></a>
+    </div>
+
+    <div class="unsubscribe">
+      <p>Se você não deseja receber mais emails de nós, <a href="URL_UNSUBSCRIBE">clique aqui</a> para cancelar a
+        inscrição.</p>
+    </div>
+  </div>
+</body>
+
+</html>

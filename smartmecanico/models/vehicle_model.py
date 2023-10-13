@@ -23,6 +23,7 @@ class Vehicle(Base):
     class Meta:
         verbose_name = "Veículo"
         verbose_name_plural = "Veículos"
+        ordering = ['-deleted_at', '-updated_at', 'year', 'brand', 'plate']
 
     def __str__(self):
         return self.plate

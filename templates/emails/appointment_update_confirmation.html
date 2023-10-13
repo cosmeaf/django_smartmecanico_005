@@ -103,20 +103,26 @@
     <div class="header">
       <img src="URL_DA_IMAGEM" alt="Logo">
     </div>
-    <div class="title">Confirmação de Agendamento</div>
-    <p>Prezados {{ appointment.customer.first_name }},</p>
-    <p>Voce acabou de receber um email de confirmaçao para serviços {{ appointment.service }}, com a empresa
-      smartmecanico:</p>
+    <div class="title">Atualização de Agendamento</div>
+    <p>Prezado(a) {{ appointment.user.first_name }},</p>
+    <p>Este é um aviso de que houve uma atualização no seu agendamento de serviços com a Smart Mecânico.</p>
+    <p>Detalhes da atualização:</p>
 
-    <p>Descriçao do serviço: {{ appointment.description }}</p>
+    <h1>Descriçao do serviço: {{ appointment.description }}</h1>
+    <hr>
     <p>Tipo de serviço: {{ appointment.service }}</p>
-    <p>Data do serviço: {{ appointment.date }}</p>
+    <p>Data do serviço: {{ appointment.day }} e horário {{ appointment.hour }} </p>
     <p>Endereço do serviço: {{ appointment.address }}</p>
     <p>Veículo Placa: {{ appointment.vehicle.plate }}</p>
     <p>Veículo Modelo: {{ appointment.vehicle.model }}</p>
 
-    <p>Agradecimentos,</p>
-    <p>Assinatura</p>
+    <p>Estamos ansiosos para atendê-lo! Se tiver qualquer dúvida ou alteração a fazer em seu agendamento, por favor,
+      entre em contato conosco o quanto antes.</p>
+
+    <p>Agradecemos por escolher a Smart Mecânico!</p>
+    <p>Atenciosamente,</p>
+    <p>Equipe Smart Mecânico</p>
+
 
     <p>OBS:</p>
     <p>Caso não tenha sido você, bla bla bla etc...</p>

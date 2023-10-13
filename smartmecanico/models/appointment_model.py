@@ -35,6 +35,7 @@ class Appointment(Base):
     day = models.DateField('Data do Serviço', help_text='Formato: YYYY-MM-DD')
     protocol = models.CharField('Protocolo', max_length=22, unique=True, default=generate_protocol)
     employee = models.ForeignKey(EmployeeInfo, verbose_name='Mecânico', on_delete=models.CASCADE, null=True, blank=True)
+    cancellation_reason = models.TextField(verbose_name='Justificativa para o cancelamento', blank=True, null=True)
 
     def clean_fields(self, exclude=None):
         # Validar e formatar o campo 'hour'
