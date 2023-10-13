@@ -36,7 +36,7 @@ urlpatterns = [
     path('api/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/', include((router.urls))),
-    re_path(r'', include(router.urls)),
+    re_path(r'api/', include(router.urls)),
     path('api/', include('security.urls')),    
 ]
 

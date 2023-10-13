@@ -17,7 +17,7 @@ def process_user_creation(sender, instance, **kwargs):
         machine_info = kwargs.get('machine_info')
         location_info = kwargs.get('location_info')
         logger.info(f"Conta criada com sucesso: {instance.email}, {ip_address}, {machine_info}, {location_info}")    
-        send_created_account_email(user=instance, ip_address=ip_address, machine_info=machine_info, location_info=location_info)
+        # send_created_account_email(user=instance, ip_address=ip_address, machine_info=machine_info, location_info=location_info)
     except Exception as e:
         logger.error(f"Erro ao processar a criação do usuário: {str(e)}")
 
@@ -30,7 +30,7 @@ def process_recover_password(sender, instance, created, **kwargs):
         location_info = get_location_info(ip_address)
 
         if created:
-            send_email_otp(user, otp_code, {}, location_info)
+            # send_email_otp(user, otp_code, {}, location_info)
             logger.info(f"Nova solicitação de recuperação de senha para {user.email}.")
         else:
             # Isso implica que o registro foi atualizado
@@ -44,10 +44,12 @@ def process_recover_password(sender, instance, created, **kwargs):
                 }
 
                 # Chamar o método de envio de e-mail.
-                send_password_changed(user, device_info)
+                # send_password_changed(user, device_info)
                 logger.info(f"Notificação de alteração de senha enviada para {user.email}.")
 
     except Exception as e:
         logger.error(f"Erro ao processar a solicitação de recuperação de senha: {str(e)}")
     finally:
         logger.info("Processamento do sinal de recuperação de senha concluído.")
+
+

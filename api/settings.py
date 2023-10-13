@@ -200,6 +200,7 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
 CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ALLOWED_ORIGINS = [
+    'http://138.255.232.130',
     'http://localhost:3000',
     'https://127.0.0.1',
     'http://127.0.0.1',
@@ -212,6 +213,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    'http://138.255.232.130',
     'http://localhost:3000',
     'https://127.0.0.1',
     'http://127.0.0.1',
@@ -250,7 +252,7 @@ REST_FRAMEWORK = {
     ),
     'API_TITLE': 'Smart Mecânico API V2',
     'API_DESCRIPTION': 'Agendamento de serviços mecânicos veiculares em qualquer lugar API',
-    'EXCEPTION_HANDLER': 'security.utils.exception.custom_exception_handler',
+    # 'EXCEPTION_HANDLER': 'security.utils.exception.custom_exception_handler',
     'NON_FIELD_ERRORS_KEY': "error",
 }
 

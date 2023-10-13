@@ -4,9 +4,9 @@ import random
 import requests
 import uuid
 from rest_framework import serializers
-from django.contrib.auth import authenticate
-from django.contrib.auth import password_validation
+from django.contrib.auth import authenticate, password_validation
 from django.utils import timezone
+from datetime import datetime, timedelta
 from django.urls import reverse
 from .models import CustomUser, RecoverPassword
 from security.signals import user_created_signal
@@ -15,6 +15,7 @@ from .utils.location.get_location_info import get_location_info
 from .utils.otp_handler import create_or_update_recovery_data
 import logging
 logger = logging.getLogger(__name__)
+
 
 MAX_FAILED_ATTEMPTS = 5
 LOCKOUT_TIME = 15
@@ -33,42 +34,46 @@ class CustomUserLoginSerializer(serializers.Serializer):
 
     def validate(self, data):
         email = data.get('email')
+        password = data.get('password')
+
         user = CustomUser.objects.filter(email=email).first()
+        if not user:
+            raise serializers.ValidationError("E-mail não registrado.")
 
-        if user and user.failed_login_attempts >= MAX_FAILED_ATTEMPTS:
-            lockout_time = timedelta(minutes=LOCKOUT_TIME)
-            current_time = datetime.now()
+        user_authenticated = authenticate(username=email, password=password)
 
-            # Se o último login falhado foi há mais de LOCKOUT_TIME minutos atrás, resete as tentativas
-            if user.last_failed_login and (current_time - user.last_failed_login) > lockout_time:
+        if user_authenticated:
                 user.failed_login_attempts = 0
                 user.save()
-            else:
-                raise serializers.ValidationError("Muitas tentativas de login. Tente novamente em {} minutos.".format(LOCKOUT_TIME))
-
-        password = data.get('password')
-        user = authenticate(username=email, password=password)
-
-        if not user:
+                data['user'] = user
+        else:
             # Incrementar tentativas falhadas e definir a última tentativa falhada
-            if user:
-                user.failed_login_attempts += 1
-                user.last_failed_login = datetime.now()
-                user.save()
+            user.failed_login_attempts += 1
+            user.last_failed_login = datetime.now()
+            user.save()
+
+            if user.failed_login_attempts >= MAX_FAILED_ATTEMPTS:
+                lockout_time = timedelta(minutes=LOCKOUT_TIME)
+                current_time = datetime.now()
+
+                if user.last_failed_login and (current_time - user.last_failed_login) > lockout_time:
+                    user.failed_login_attempts = 0
+                    user.save()
+                else:
+                    raise serializers.ValidationError("Muitas tentativas de login. Tente novamente em {} minutos.".format(LOCKOUT_TIME))
+
             raise serializers.ValidationError(
                 "Unable to log in with provided credentials.",
                 code='authentication_failed'
             )
-        else:
-            user.failed_login_attempts = 0
-            user.save()
+
+        return data
 
     def to_representation(self, instance):
         return {
-            'id': instance['user'].id,
-            'email': instance['user'].email,
-            'first_name': instance['user'].first_name,
-            'last_name': instance['user'].last_name,
+            'email': instance.email,
+            'first_name': instance.first_name,
+            'last_name': instance.last_name,
         }
 
 

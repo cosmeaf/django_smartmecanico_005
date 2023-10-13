@@ -1,19 +1,12 @@
-from rest_framework import status, serializers, viewsets, permissions
-from rest_framework.response import Response
-from rest_framework.decorators import action
-from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import BasePermission
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import viewsets, permissions
 from security.models import CustomUser
-from smartmecanico.models.address_model import Address
 from smartmecanico.models.vehicle_model import Vehicle
 from smartmecanico.serializers.vehicle_serializers import VehicleSerializer, VehicleDetailSerializer
 
-
-# VIEW VEHICLE
 class IsVehicleOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
+        if request.user.is_staff:
+            return True
         return obj.user == request.user
 
 class VehicleModelViewSet(viewsets.ModelViewSet):
@@ -26,7 +19,12 @@ class VehicleModelViewSet(viewsets.ModelViewSet):
         return self.queryset.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        if self.request.user.is_staff and 'user' in serializer.validated_data:
+            user_email = serializer.validated_data['user'].email
+            user = CustomUser.objects.get(email=user_email)
+            serializer.save(user=user)
+        else:
+            serializer.save(user=self.request.user)
 
     def get_permissions(self):
         if self.action in ['list', 'create']:
