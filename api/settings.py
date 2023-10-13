@@ -158,9 +158,11 @@ ADMIN_SITE_TITLE = 'Smart Mecânico'
 INDEX_TITLE = "Adminstração Smart Mecânico"
 ADMIN_SITE_HEADER = "Adminstração Smart Mecânico"
 
+# SESSION 
+SESSION_COOKIE_AGE = 1800
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 # LOGGER DEBUG
-
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
