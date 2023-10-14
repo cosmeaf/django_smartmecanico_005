@@ -1,3 +1,7 @@
+from django.http import Http404
+from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework import status, serializers, viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -5,17 +9,21 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import BasePermission
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .serializers import CustomUserLoginSerializer, UserRegisterSerializer, PasswordRecoverySerializer, OtpValidationSerializer, ResetPasswordSerializer
-from django.http import Http404
-from .models import RecoverPassword  
-from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import NotFound
+from .models import RecoverPassword  
+from .serializers import (CustomUserLoginSerializer, 
+UserRegisterSerializer, PasswordRecoverySerializer, 
+OtpValidationSerializer, ResetPasswordSerializer
+)
+
 
 # Login Custumizado
 class CustomUserLoginView(CreateAPIView):
     serializer_class = CustomUserLoginSerializer
     permission_classes = [AllowAny] 
 
+    CACHE_KEY_PREFIX = "login"
+    @method_decorator(cache_page(300, key_prefix=CACHE_KEY_PREFIX))
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

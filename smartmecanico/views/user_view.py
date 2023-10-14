@@ -1,12 +1,10 @@
 from rest_framework import viewsets, permissions
 from security.models import CustomUser
-from smartmecanico.serializers.user_serializers import CustomUserSerializer
+from smartmecanico.serializers.user_serializers import CustomUserSerializer, CustomUserAllSerializer
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 class IsUserOwner(permissions.BasePermission):
-    """
-    Permissão personalizada que permite superusuários fazerem qualquer coisa,
-    enquanto usuários normais só podem manipular seus próprios registros.
-    """
     def has_object_permission(self, request, view, obj):
         if request.user.is_superuser:
             return True
@@ -36,3 +34,12 @@ class CustomUserModelViewSet(viewsets.ModelViewSet):
             permission_classes = [permissions.IsAuthenticated, IsUserOwner]
 
         return [permission() for permission in permission_classes]
+
+    @action(detail=True, methods=['get'])
+    def all_data(self, request, pk=None):
+        try:
+            custom_user = CustomUser.objects.get(pk=pk)
+            serializer = CustomUserAllSerializer(custom_user)
+            return Response(serializer.data)
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "Usuário não encontrado."}, status=404)

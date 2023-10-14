@@ -37,7 +37,9 @@ urlpatterns = [
     path('api/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/', include((router.urls))),
     re_path(r'api/', include(router.urls)),
-    path('api/', include('security.urls')),    
+    path('api/', include('security.urls')),
+    path('api/users/<int:pk>/all_data/', CustomUserModelViewSet.as_view({'get': 'all_data'}), name='users-all-data'),
+  
 ]
 
 if settings.DEBUG:

@@ -1,7 +1,10 @@
-from rest_framework import serializers
-from security.models import CustomUser
 import string
 import random
+from rest_framework import serializers
+from security.models import CustomUser
+from smartmecanico.models.address_model import Address
+from smartmecanico.models.vehicle_model import Vehicle
+
 
 def generate_random_password(length=8):
     characters = string.ascii_letters + string.digits + string.punctuation
@@ -27,11 +30,27 @@ class CustomUserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-
-
-
 class CustomUserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('id', 'email', 'first_name', 'last_name', 'image', 'birthday', 'phone_number', 'is_active', 'is_staff', 'is_superuser')
         read_only_fields = ('id',)
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = '__all__'
+
+class VehicleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vehicle
+        fields = '__all__'
+
+class CustomUserAllSerializer(serializers.ModelSerializer):
+    address = AddressSerializer(many=True, read_only=True)
+    vehicles = VehicleSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = CustomUser
+        fields = '__all__'
