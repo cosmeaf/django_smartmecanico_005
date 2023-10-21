@@ -189,9 +189,13 @@ class OtpValidationSerializer(serializers.ModelSerializer):
         if timezone.now() > otp_data.expiry_datetime:
             raise serializers.ValidationError('O OTP expirou.')
 
-        reset_url = reverse('password_reset', kwargs={'uuid': str(otp_data.id), 'token': otp_data.token})
+        # reset_url = reverse('password_reset', kwargs={'uuid': str(otp_data.id), 'token': otp_data.token})
+        # logger.info(reset_url)
+        # return {"reset_url": reset_url}
+        token_value = f"{str(otp_data.id)}/{otp_data.token}"
+        logger.info(token_value)
+        return {"token": token_value}
 
-        return {"reset_url": reset_url}
 
 
 class ResetPasswordSerializer(serializers.Serializer):

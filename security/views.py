@@ -71,8 +71,11 @@ class OtpValidationView(CreateAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        reset_url = serializer.validated_data["reset_url"]
-        return Response({"message": "OTP validado com sucesso", "reset_url": reset_url})
+        # reset_url = serializer.validated_data["reset_url"]
+        # return Response({"message": "OTP validado com sucesso", "reset_url": reset_url})
+        token_value = serializer.validated_data["token"]
+        return Response({"message": "OTP validado com sucesso", "token": token_value})
+
 
 # Reset Password After OTP
 class ResetPasswordView(CreateAPIView):
