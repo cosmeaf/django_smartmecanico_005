@@ -8,7 +8,7 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ['id', 'cep', 'logradouro', 'complemento', 'bairro', 'localidade', 'uf', 'user']
-        read_only_fields = ('id',)
+        read_only_fields = ('id', 'user')
 
     def validate_cep(self, value):
         """Valida se o CEP tem o formato correto."""
@@ -17,7 +17,7 @@ class AddressSerializer(serializers.ModelSerializer):
         return value
 
 class AddressDetailSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    user = serializers.SlugRelatedField(slug_field='email',queryset=CustomUser.objects.all(),default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Address
